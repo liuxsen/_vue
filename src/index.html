@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../vue.js"></script>
+</head>
+<body>
+  <div id="app">
+    <span :id="b"></span>
+    {{ a }} 
+    {{ a+1 }}
+    <span v-if="c">see</span>
+    <child :value="text" @getchildvalue="getValue"></child>
+  </div>
+  <script>
+
+    Vue.component('child-com',{
+      template: '<div>1</div>',
+    })
+
+    var child ={
+      data: function () {
+        return {
+          a: 1
+        }
+      },
+      props: ['value'],
+      template: '<div @click="post">{{ value }}</div>',
+      methods: {
+        post: function(){
+          this.$emit('getchildvalue', 'child-value')
+        }
+      }
+    }
+
+    var data = {
+      a: 1,
+      b: 'bbb',
+      c: true,
+      text: 'text'
+    }
+    var vm = new Vue({
+      el: '#app',
+      data: data,
+      components:{
+        child
+      },
+      methods:{
+        getValue: function(text){
+          this.text = text
+        }
+      },
+      created: function(){
+        console.log('a is' + this.a)
+      },
+      mounted: function(){
+        console.log('mounted')
+      },
+      update: function(){
+        console.log('update')
+      },
+      destroyed: function(){
+        console.log('destroyed')
+      }
+    })
+    
+    
+  </script>
+</body>
+</html>

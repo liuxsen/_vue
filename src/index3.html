@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../vue.js"></script>
+</head>
+<body>
+  <div id="app">
+    <child :info="info" :count="count">
+    </child>
+  </div>
+  <script>
+
+    Vue.component('child-com',{
+      template: '<div>1</div>',
+    })
+
+    var son ={
+      data: function () {
+        return {}
+      },
+      props: ['info'],
+      inheritAttrs: false,
+      template: '<div @click="post"> {{$attrs}} {{ info }} ---son</div>',
+      methods: {
+        post: function(){
+          this.$emit('update:info', {age: 999,name: this.info.name})
+        }
+      },
+      mounted: function(){
+        console.log(this)
+      }
+    }
+
+    var child ={
+      data: function () {
+        return {}
+      },
+      components: {
+        son
+      },
+      inheritAttrs: false,
+      props: ['info'],
+      template: '<div @click="post">   <son v-bind="$attrs" :info="info"></son>  <div>{{ info }} ----child</div></div>',
+      methods: {
+        post: function(){
+          this.$emit('update:info', {age: 999,name: this.info.name})
+        }
+      },
+      mounted: function(){
+        console.log('child')
+        console.log(this)
+      }
+    }
+    
+
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        a: 1,
+        b: 'bbb',
+        c: true,
+        count: 'count',
+        text: 'text',
+        info: {
+          age: 1,
+          name: 'aaa'
+        }
+      },
+      components:{
+        child
+      },
+      methods:{
+      },
+      created: function(){
+        console.log('a is' + this.a)
+      },
+      mounted: function(){
+        console.log('mounted')
+      },
+      update: function(){
+        console.log('update')
+      },
+      destroyed: function(){
+        console.log('destroyed')
+      }
+    })
+    
+    
+  </script>
+</body>
+</html>
